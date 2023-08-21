@@ -1,6 +1,5 @@
 import UIKit
 
-
 class ViewController: UIViewController,UITableViewDataSource, UITableViewDelegate {
    
     var veiwModel:[Article] = [Article]()
@@ -17,8 +16,7 @@ class ViewController: UIViewController,UITableViewDataSource, UITableViewDelegat
         
         tableView.delegate  = self
         tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
-
+     
         APIManager.shared.fetchData { result in
             switch result {
             case .success(let articles):
@@ -39,23 +37,32 @@ class ViewController: UIViewController,UITableViewDataSource, UITableViewDelegat
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
-//        as! CustomTableViewCell
-                
-//        let item = veiwModel[indexPath.row]
-//        
-//        cell.titleLabel.text = item.title
-//        cell.descriptionLabel.text = item.description
-              cell.textLabel?.text = veiwModel[indexPath.row].title
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CustomTableViewCell
+        
+        let item = veiwModel[indexPath.row]
+        cell.titleLabel.text = item.title
+        cell.descriptionLabel.text = item.description
+//        cell.newsImage.image  = newsImage
         return cell
     }
 }
 
 class CustomTableViewCell: UITableViewCell {
-//    @IBOutlet weak var titleLabel: UILabel!
-//    @IBOutlet weak var descriptionLabel: UILabel!
-//    @IBOutlet weak var customImageView: UIImageView!
-    
     @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var newsImage: UIImageView!
     @IBOutlet weak var descriptionLabel: UILabel!
 }
+
+
+
+
+
+//        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
+//        as! CustomTableViewCell
+//
+////        let item = veiwModel[indexPath.row]
+////
+////        cell.titleLabel.text = item.title
+////        cell.descriptionLabel.text = item.description
+//        cell.textLabel?.text = veiwModel[indexPath.row].title
+//
