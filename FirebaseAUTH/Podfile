@@ -1,0 +1,9 @@
+platform :ios, '14.0'
+use_modular_headers!
+
+target 'FirebaseAUTH' do
+  # Other pods you might have
+  pod 'Firebase/Core'
+  pod 'Firebase/Auth' # If you need authentication
+  # Add other Firebase pods you need
+end
