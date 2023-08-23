@@ -3,20 +3,26 @@ import Firebase
 
 class ViewController: UIViewController {
     
+    let activityIndicator = UIActivityIndicatorView(style: .large)
+   
     private let Pagetitle:UILabel = {
         let title = UILabel()
         title.textAlignment = .center
         title.font = .systemFont(ofSize: 24,weight: .bold)
         title.text = "Sign In"
+        title.font = title.font.withSize(40)
+        title.adjustsFontSizeToFitWidth = true
+        title.textColor = .white
+        title.numberOfLines = 0
         return title
     }()
     
     private let EmailInput:UITextField = {
         let EmailInput = UITextField()
         EmailInput.placeholder = "Email"
-        EmailInput.layer.borderWidth = 1
-        EmailInput.layer.borderColor = UIColor.black.cgColor
-        
+        EmailInput.layer.borderWidth = 3
+        EmailInput.layer.borderColor = UIColor.systemGreen.cgColor
+        EmailInput.backgroundColor = .white
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: EmailInput.frame.height))
         EmailInput.leftView = paddingView
         EmailInput.leftViewMode = .always
@@ -27,10 +33,10 @@ class ViewController: UIViewController {
     private let PasswordInput:UITextField = {
         let PasswordInput = UITextField()
         PasswordInput.placeholder = "Password"
-        PasswordInput.layer.borderWidth = 1
+        PasswordInput.layer.borderWidth = 3
         PasswordInput.isSecureTextEntry = true
-        PasswordInput.layer.borderColor = UIColor.black.cgColor
-        
+        PasswordInput.layer.borderColor = UIColor.systemGreen.cgColor
+        PasswordInput.backgroundColor = .white
         let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: PasswordInput.frame.height))
         PasswordInput.leftView = paddingView
         PasswordInput.leftViewMode = .always
@@ -56,18 +62,18 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.backgroundColor = .black
         view.addSubview(Pagetitle)
         view.addSubview(EmailInput)
         view.addSubview(PasswordInput)
         view.addSubview(button)
+        view.addSubview(activityIndicator)
+
+        activityIndicator.color = .gray
+        
         button.addTarget(self, action: #selector(buttonHandeler), for: .touchUpInside)
         LogoutButton.addTarget(self, action: #selector(LogoutButtonHandler), for: .touchUpInside)
-        
-        Pagetitle.translatesAutoresizingMaskIntoConstraints = false
-        EmailInput.translatesAutoresizingMaskIntoConstraints = false
-        PasswordInput.translatesAutoresizingMaskIntoConstraints = false
-        button.translatesAutoresizingMaskIntoConstraints = false
-        LogoutButton.translatesAutoresizingMaskIntoConstraints = false
         
         if (Auth.auth().currentUser != nil) {
             Pagetitle.text = "Welcome Home"
@@ -78,9 +84,18 @@ class ViewController: UIViewController {
             addLogoutButtonContraints()
         }
         
+        Pagetitle.translatesAutoresizingMaskIntoConstraints = false
+        EmailInput.translatesAutoresizingMaskIntoConstraints = false
+        PasswordInput.translatesAutoresizingMaskIntoConstraints = false
+        button.translatesAutoresizingMaskIntoConstraints = false
+        LogoutButton.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        
         NSLayoutConstraint.activate([
             Pagetitle.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             Pagetitle.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
+            Pagetitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            Pagetitle.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
             EmailInput.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             EmailInput.topAnchor.constraint(equalTo: Pagetitle.bottomAnchor, constant: 20),
@@ -96,13 +111,14 @@ class ViewController: UIViewController {
             button.topAnchor.constraint(equalTo: PasswordInput.bottomAnchor, constant: 20),
             button.widthAnchor.constraint(equalToConstant: view.frame.size.width-20),
             button.heightAnchor.constraint(equalToConstant:50),
-            
+          
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -110,21 +126,23 @@ class ViewController: UIViewController {
         EmailInput.becomeFirstResponder()
     }
     @objc func buttonHandeler(){
+        activityIndicator.startAnimating()
         guard let email = EmailInput.text, !email.isEmpty,
               let pass = PasswordInput.text, !pass.isEmpty else{
             showErrorToast(message:"Missing field data" )
+            activityIndicator.stopAnimating()
             return
         }
         Auth.auth().signIn(withEmail: email, password: pass) { [weak self] authResult, error in
             
             guard let strongSelf = self else { return }
             
+            strongSelf.activityIndicator.stopAnimating()
+            
             if let error = error {
-                // Handle sign-in error
-                print("Sign-in error: \(error.localizedDescription)")
+                print("Sign-in error: \(error)")
                 strongSelf.showCreateAccound(email: email, password:pass)
             } else {
-                // Sign-in successful
                 print("Sign-in successful")
                 strongSelf.Pagetitle.text = "Welcome HOME"
                 strongSelf.EmailInput.isHidden = true
@@ -132,7 +150,6 @@ class ViewController: UIViewController {
                 strongSelf.button.isHidden = true
                 strongSelf.view.addSubview(strongSelf.LogoutButton)
                 strongSelf.addLogoutButtonContraints()
-                // You can navigate to another screen or perform further actions here
             }
         }
         
@@ -175,16 +192,14 @@ class ViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Continue",
                                       style: .default,
                                       handler:{_ in
+            self.activityIndicator.startAnimating()
             Auth.auth().createUser(withEmail: email, password: password,completion: {[weak self] result, error in
-                
                 guard let strongSelf = self else { return }
-                
+                self?.activityIndicator.stopAnimating()
                 if let error = error {
-                    // Handle sign-in error
                     print("Sign-Up error: \(error.localizedDescription)")
                     strongSelf.showErrorToast(message:"Something went wrong!")
                 } else {
-                    // Sign-in successful
                     print("Account Created successful")
                     strongSelf.Pagetitle.text = "Welcome HOME"
                     strongSelf.EmailInput.isHidden = true
