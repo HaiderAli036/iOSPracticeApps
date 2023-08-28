@@ -7,21 +7,6 @@ class ProfileVC: UIViewController {
     @IBOutlet var tableView:UITableView!
     let data = ["Settings","Log out"]
     
-    private let ChatLogo:UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "person.circle")
-        imageView.tintColor = .gray
-        imageView.isUserInteractionEnabled = true
-        imageView.layer.masksToBounds = true
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 20
-        imageView.layer.borderWidth = 2
-        imageView.layer.masksToBounds = true
-
-        imageView.layer.borderColor = UIColor.gray.cgColor
-        return imageView
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView?.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
@@ -30,23 +15,16 @@ class ProfileVC: UIViewController {
         setProfileImage()
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        let size = view.width/3
-        ChatLogo.frame = CGRect(x:(view.width-size)/2,y: 20,width: size,height: size)
-    }
-    
     private func setProfileImage(){
         profileImageView.image = UIImage(systemName: "person.circle")
         profileImageView.tintColor = .gray
-        profileImageView.contentMode = .scaleAspectFit
+        profileImageView.contentMode = .scaleAspectFill
         profileImageView.isUserInteractionEnabled = true
-        profileImageView.contentMode = .scaleAspectFit
         profileImageView.layer.cornerRadius = profileImageView.width/2.0
-        ChatLogo.layer.borderWidth = 2
-        ChatLogo.layer.borderColor = UIColor.lightGray.cgColor
-        profileImageView.layer.masksToBounds = true
-        
+        profileImageView.layer.borderWidth = 2
+        profileImageView.layer.borderColor = UIColor.lightGray.cgColor
+        profileImageView.clipsToBounds = true
+    
         let email = UserDefaults.standard.string(forKey: "email")!
         let safeEmail = DatabaseManager.safeEmail(email: email)
         let fileName = safeEmail+"_profile_picture.png"

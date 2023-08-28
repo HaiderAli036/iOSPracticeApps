@@ -3,6 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -32,32 +33,44 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1WI-Lv-Wri">
-                                <rect key="frame" x="131.66666666666666" y="165" width="129.99999999999997" height="130"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="av8-X5-PiM">
+                                <rect key="frame" x="0.0" y="155" width="393" height="200"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="TvB-gb-Ovh" userLabel="Profile Image View">
+                                        <rect key="frame" x="106.66666666666669" y="10" width="180" height="180"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="180" id="0Cp-vP-QtH"/>
+                                            <constraint firstAttribute="width" constant="180" id="pOW-9w-K3U"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" name="AccentColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="130" id="9My-zg-PRm"/>
-                                    <constraint firstAttribute="height" constant="130" id="pjj-GS-uuO"/>
+                                    <constraint firstItem="TvB-gb-Ovh" firstAttribute="top" secondItem="av8-X5-PiM" secondAttribute="top" constant="10" id="3Tc-MR-AWH"/>
+                                    <constraint firstItem="TvB-gb-Ovh" firstAttribute="centerX" secondItem="av8-X5-PiM" secondAttribute="centerX" id="W5v-IA-HR3"/>
+                                    <constraint firstAttribute="bottom" secondItem="TvB-gb-Ovh" secondAttribute="bottom" constant="10" id="lCK-9W-H3q"/>
                                 </constraints>
-                            </imageView>
+                            </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="IH5-AS-F3q">
-                                <rect key="frame" x="0.0" y="305" width="393" height="464"/>
+                                <rect key="frame" x="0.0" y="365" width="393" height="487"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="fRb-Qx-80j"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="IH5-AS-F3q" firstAttribute="bottom" secondItem="fRb-Qx-80j" secondAttribute="bottom" id="OWR-dz-X0R"/>
-                            <constraint firstItem="IH5-AS-F3q" firstAttribute="top" secondItem="1WI-Lv-Wri" secondAttribute="bottom" constant="10" id="RXS-Mw-48m"/>
-                            <constraint firstItem="IH5-AS-F3q" firstAttribute="trailing" secondItem="fRb-Qx-80j" secondAttribute="trailing" id="VnW-sp-GGt"/>
-                            <constraint firstItem="1WI-Lv-Wri" firstAttribute="top" secondItem="fRb-Qx-80j" secondAttribute="top" constant="10" id="Wfs-0I-VfW"/>
-                            <constraint firstItem="1WI-Lv-Wri" firstAttribute="centerX" secondItem="AGy-hb-1e2" secondAttribute="centerX" id="oOT-7c-Mvy"/>
-                            <constraint firstItem="IH5-AS-F3q" firstAttribute="leading" secondItem="fRb-Qx-80j" secondAttribute="leading" id="vpm-yn-R4y"/>
+                            <constraint firstItem="fRb-Qx-80j" firstAttribute="trailing" secondItem="av8-X5-PiM" secondAttribute="trailing" id="1Hv-Mq-Aqh"/>
+                            <constraint firstItem="av8-X5-PiM" firstAttribute="top" secondItem="AGy-hb-1e2" secondAttribute="topMargin" id="A3G-xG-001"/>
+                            <constraint firstItem="av8-X5-PiM" firstAttribute="leading" secondItem="fRb-Qx-80j" secondAttribute="leading" id="Jvv-vx-YYl"/>
+                            <constraint firstAttribute="bottom" secondItem="IH5-AS-F3q" secondAttribute="bottom" id="R7l-kr-T4X"/>
+                            <constraint firstItem="IH5-AS-F3q" firstAttribute="leading" secondItem="fRb-Qx-80j" secondAttribute="leading" id="SSV-zn-tQe"/>
+                            <constraint firstItem="IH5-AS-F3q" firstAttribute="top" secondItem="av8-X5-PiM" secondAttribute="bottom" constant="10" id="UOx-qV-eak"/>
+                            <constraint firstItem="IH5-AS-F3q" firstAttribute="trailing" secondItem="fRb-Qx-80j" secondAttribute="trailing" id="jid-eQ-R3I"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Profile" id="Hr0-7g-Tca"/>
                     <connections>
-                        <outlet property="profileImageView" destination="1WI-Lv-Wri" id="5Iz-ws-aBO"/>
+                        <outlet property="profileImageView" destination="TvB-gb-Ovh" id="39T-Mv-kvy"/>
                         <outlet property="tableView" destination="IH5-AS-F3q" id="8Ag-OP-84C"/>
                     </connections>
                 </viewController>
@@ -123,6 +136,9 @@
     <resources>
         <image name="message.fill" catalog="system" width="128" height="114"/>
         <image name="person.crop.circle.fill" catalog="system" width="128" height="123"/>
+        <namedColor name="AccentColor">
+            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

@@ -22,7 +22,7 @@ class ConversationsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        let rightButton = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(startNewChat))
+        let rightButton = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(composeNewChat))
         navigationItem.rightBarButtonItem = rightButton
 
         fetchChats()
@@ -41,10 +41,23 @@ class ConversationsVC: UIViewController {
         tableView.frame = view.bounds
     }
     
-    @objc private func startNewChat(){
-        let vc = UINavigationController(rootViewController:NewConversationVC())
-        present(vc, animated: true)
+    @objc private func composeNewChat(){
+        let vc = NewConversationVC()
+        vc.completion = {[weak self] result in
+            self?.startNewChat(result: result)
+        }
+        let navVc = UINavigationController(rootViewController:vc)
+        present(navVc, animated: true)
     }
+    
+    private func startNewChat(result:UserInfo){
+        let vc = ChatVC(with: result.email)
+        vc.isNewConversation = true
+        vc.title = result.firstName
+        vc.navigationItem.largeTitleDisplayMode = .never
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
     private func setUpTableView(){
         tableView.delegate = self
         tableView.dataSource = self
@@ -80,7 +93,7 @@ extension ConversationsVC:  UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let vc = ChatVC()
+        let vc = ChatVC(with: "usama@gmail.com")
         vc.title = "Usama"
         vc.navigationItem.largeTitleDisplayMode = .never
         navigationController?.pushViewController(vc, animated: true)

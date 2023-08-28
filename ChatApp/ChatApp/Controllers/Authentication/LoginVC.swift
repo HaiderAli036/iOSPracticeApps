@@ -97,7 +97,7 @@ class LoginVC: UIViewController {
                                 y: 10,
                                 width: size,
                                 height: size)
-        EmailInput.frame = CGRect(x:30 ,
+        EmailInput.frame = CGRect(x:30 ,te
                                   y: ChatLogo.bottom+20,
                                   width: scrollView.width-60,
                                   height: 52)
@@ -127,7 +127,6 @@ class LoginVC: UIViewController {
             showToast(message:"Missing field data" )
             LoginButton.isEnabled = true
             activityIndicator.stopAnimating()
-            navigationController?.dismiss(animated: true)
             return
         }
         Auth.auth().signIn(withEmail: email, password: pass) { [weak self] authResult, error in

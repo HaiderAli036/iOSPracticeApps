@@ -8,7 +8,9 @@ struct UserInfo {
 
 class NewConversationVC: UIViewController {
     var users:[UserInfo] = []
+    var allUsers:[UserInfo] = []
     let activityIndicator = UIActivityIndicatorView(style: .large)
+    public var completion:((UserInfo)->(Void))?
     
     let searchBar:UISearchBar = {
         let searchBar = UISearchBar()
@@ -28,9 +30,10 @@ class NewConversationVC: UIViewController {
     private let noChatsLabel:UILabel = {
         let label = UILabel()
         label.isHidden = true
-        label.text = "No Conversations"
+        label.text = "No Users found.."
         label.textAlignment = .center
         label.textColor = .gray
+        label.numberOfLines  = 0
         label.font = .systemFont(ofSize: 21, weight: .medium)
         return label
     }()
@@ -47,6 +50,7 @@ class NewConversationVC: UIViewController {
         view.addSubview(tableView)
         view.addSubview(noChatsLabel)
         view.addSubview(activityIndicator)
+        view.addSubview(noChatsLabel)
         setUpTableView()
         
         DatabaseManager().fetchDataFromDatabase { result in
@@ -54,6 +58,7 @@ class NewConversationVC: UIViewController {
             case .success(let data):
                 let userInfoArray = self.convertToUserInfoArray(data: data)
                 self.users = userInfoArray
+                self.allUsers = userInfoArray
                 self.tableView.reloadData()
                 self.activityIndicator.stopAnimating()
             case .failure(let error):
@@ -68,6 +73,10 @@ class NewConversationVC: UIViewController {
         tableView.frame = view.bounds
         let indicatorWidth: CGFloat = 50
         let indicatorHeight: CGFloat = 50
+        noChatsLabel.frame = CGRect( x: 0,
+                                     y: 100,
+                                     width: view.bounds.width,
+                                     height: 100)
         activityIndicator.frame = CGRect( x: (view.bounds.width - indicatorWidth) / 2,
                                           y: (view.bounds.height - indicatorHeight) / 2,
                                           width: indicatorWidth,
@@ -116,27 +125,32 @@ extension NewConversationVC:  UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
-        let vc = ChatVC()
-        vc.title = users[indexPath.row].firstName
-        vc.navigationItem.largeTitleDisplayMode = .never
-        navigationController?.pushViewController(vc, animated: true)
+        let targetUser = users[indexPath.row]
+        dismiss(animated: true,completion: { [weak self] in
+            self?.completion?(targetUser)
+        })
     }
 }
 
 extension NewConversationVC:UISearchBarDelegate{
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if let searchText = searchBar.text {
-            print("Search text: \(searchText)")
-            searchBar.resignFirstResponder() // Dismiss the keyboard
-            users = filterUserInfoArray(userInfoArray:users,emailPrefix:searchText )
+            users = filterUserInfoArray(userInfoArray:allUsers,searchPrefix:searchText )
+           
+            if users.count == 0 {
+                noChatsLabel.isHidden = false
+            }else{
+                noChatsLabel.isHidden = true
+            }
+           
             tableView.reloadData()
         }
     }
     
-    func filterUserInfoArray(userInfoArray: [UserInfo], emailPrefix: String) -> [UserInfo] {
+    func filterUserInfoArray(userInfoArray: [UserInfo], searchPrefix: String) -> [UserInfo] {
             let filteredArray = userInfoArray.filter { userInfo in
-                return userInfo.firstName.hasPrefix(emailPrefix) || userInfo.lastName.hasPrefix(emailPrefix)
+                return userInfo.firstName.hasPrefix(searchPrefix) || userInfo.lastName.hasPrefix(searchPrefix)
             }
             return filteredArray
     }

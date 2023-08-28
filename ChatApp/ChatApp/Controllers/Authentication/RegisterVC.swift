@@ -179,6 +179,7 @@ class RegisterVC: UIViewController {
             showToast(message:"Please fill all the data" )
             return
         }
+        
         DatabaseManager.shared.validateUser(wiht: email, completion: {exists in
             guard !exists else{
                 self.showToast(message:"Email already exists" )
