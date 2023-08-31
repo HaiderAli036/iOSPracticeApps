@@ -1,9 +1,9 @@
 import UIKit
 
 class CustomToast: UIView {
-
+    
     private let messageLabel = UILabel()
-
+    
     init(error:Bool=true,message: String) {
         super.init(frame: CGRect.zero)
         messageLabel.text = message
@@ -31,11 +31,11 @@ class CustomToast: UIView {
         layer.cornerRadius = 10
         clipsToBounds = true
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     func show(in view: UIView, duration: TimeInterval = 2.0) {
         view.addSubview(self)
         

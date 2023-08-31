@@ -11,6 +11,8 @@
 		5558CDFC2A971C71003BD244 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5558CDFB2A971C71003BD244 /* DatabaseManager.swift */; };
 		5558CDFE2A971EBF003BD244 /* ChatAppUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5558CDFD2A971EBF003BD244 /* ChatAppUser.swift */; };
 		5558CE002A978FA2003BD244 /* ChatVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5558CDFF2A978FA2003BD244 /* ChatVC.swift */; };
+		558ED5502A9F17310070A7C0 /* ConversationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558ED54E2A9F17310070A7C0 /* ConversationTableViewCell.swift */; };
+		558ED5512A9F17310070A7C0 /* ConversationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 558ED54F2A9F17310070A7C0 /* ConversationTableViewCell.xib */; };
 		55A6F93E2A94D50F001DA4CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A6F93D2A94D50F001DA4CB /* AppDelegate.swift */; };
 		55A6F9402A94D50F001DA4CB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A6F93F2A94D50F001DA4CB /* SceneDelegate.swift */; };
 		55A6F9422A94D50F001DA4CB /* ConversationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A6F9412A94D50F001DA4CB /* ConversationsVC.swift */; };
@@ -36,6 +38,8 @@
 		5558CDFB2A971C71003BD244 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		5558CDFD2A971EBF003BD244 /* ChatAppUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatAppUser.swift; sourceTree = "<group>"; };
 		5558CDFF2A978FA2003BD244 /* ChatVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatVC.swift; sourceTree = "<group>"; };
+		558ED54E2A9F17310070A7C0 /* ConversationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationTableViewCell.swift; sourceTree = "<group>"; };
+		558ED54F2A9F17310070A7C0 /* ConversationTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ConversationTableViewCell.xib; sourceTree = "<group>"; };
 		55A6F93A2A94D50F001DA4CB /* ChatApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		55A6F93D2A94D50F001DA4CB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		55A6F93F2A94D50F001DA4CB /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -75,6 +79,15 @@
 				03B5D00BB1261773F42DAC99 /* Pods-ChatApp.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		558ED5522A9F17910070A7C0 /* ConversationCell */ = {
+			isa = PBXGroup;
+			children = (
+				558ED54E2A9F17310070A7C0 /* ConversationTableViewCell.swift */,
+				558ED54F2A9F17310070A7C0 /* ConversationTableViewCell.xib */,
+			);
+			path = ConversationCell;
 			sourceTree = "<group>";
 		};
 		55A6F9312A94D50F001DA4CB = {
@@ -123,6 +136,7 @@
 		55B0D0B22A94D5EE00B4EE4A /* View */ = {
 			isa = PBXGroup;
 			children = (
+				558ED5522A9F17910070A7C0 /* ConversationCell */,
 				55B0D0B52A94D66400B4EE4A /* Storyboards */,
 			);
 			path = View;
@@ -246,6 +260,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				558ED5512A9F17310070A7C0 /* ConversationTableViewCell.xib in Resources */,
 				55A6F94A2A94D511001DA4CB /* LaunchScreen.storyboard in Resources */,
 				55A6F9472A94D511001DA4CB /* Assets.xcassets in Resources */,
 				55A6F9452A94D50F001DA4CB /* Main.storyboard in Resources */,
@@ -310,6 +325,7 @@
 				55B0D0C12A94D88C00B4EE4A /* VedioPlayerVC.swift in Sources */,
 				55B0D0BD2A94D86000B4EE4A /* NewConversationVC.swift in Sources */,
 				55A6F93E2A94D50F001DA4CB /* AppDelegate.swift in Sources */,
+				558ED5502A9F17310070A7C0 /* ConversationTableViewCell.swift in Sources */,
 				5558CE002A978FA2003BD244 /* ChatVC.swift in Sources */,
 				55B0D0BF2A94D87900B4EE4A /* ImageViewerVC.swift in Sources */,
 				5558CDFC2A971C71003BD244 /* DatabaseManager.swift in Sources */,

@@ -3,7 +3,7 @@ import FirebaseStorage
 import Foundation
 
 final class StorageManager{
-     
+    
     static let shared = StorageManager()
     private let storage = Storage.storage().reference()
 }

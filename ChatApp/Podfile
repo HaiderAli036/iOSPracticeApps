@@ -9,12 +9,15 @@ target 'ChatApp' do
   pod 'Firebase/Database'
   pod 'Firebase/Storage'
   
+  platform :ios, '16.4'
+
+  
   pod 'FBSDKLoginKit'
   pod 'GoogleSignIn'
   
 #  pod 'JGProgressHUD'
   pod 'RealmSwift'
-#  pod 'SDWEBImage'
+  pod 'SDWebImage', '~> 5.0'
   pod 'MessageKit'
 
   # Pods for ChatApp

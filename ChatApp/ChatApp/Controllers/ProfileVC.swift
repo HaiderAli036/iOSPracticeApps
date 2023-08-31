@@ -5,6 +5,7 @@ class ProfileVC: UIViewController {
     
     @IBOutlet var profileImageView:UIImageView!
     @IBOutlet var tableView:UITableView!
+    @IBOutlet var userName:UILabel!
     let data = ["Settings","Log out"]
     
     override func viewDidLoad() {
@@ -13,8 +14,15 @@ class ProfileVC: UIViewController {
         tableView?.delegate = self
         tableView?.dataSource = self
         setProfileImage()
+        
+        guard let userName = UserDefaults.standard.value(forKey: "user_name") as? String else{
+            return
+        }
+        self.userName.text = userName
+        
+        
     }
-
+    
     private func setProfileImage(){
         profileImageView.image = UIImage(systemName: "person.circle")
         profileImageView.tintColor = .gray
@@ -24,8 +32,8 @@ class ProfileVC: UIViewController {
         profileImageView.layer.borderWidth = 2
         profileImageView.layer.borderColor = UIColor.lightGray.cgColor
         profileImageView.clipsToBounds = true
-    
-        let email = UserDefaults.standard.string(forKey: "email")!
+        
+        let email = UserDefaults.standard.string(forKey: "user_email")!
         let safeEmail = DatabaseManager.safeEmail(email: email)
         let fileName = safeEmail+"_profile_picture.png"
         let path = "images/"+fileName
@@ -35,31 +43,31 @@ class ProfileVC: UIViewController {
             case  .success(let downloadUrl):
                 self.downloadAndSetImage(from:downloadUrl)
             case .failure(let error):
-                 print(error)
+                print(error)
             }
         })
     }
     
     func downloadAndSetImage(from imageURL: URL) {
-            let session = URLSession.shared
-    
-            let task = session.dataTask(with: imageURL) { data, response, error in
-                if let error = error {
-                    print("Error downloading image: \(error)")
-                    return
-                }
-                guard let data = data else {
-                    print("No data received")
-                    return
-                }
-                if let image = UIImage(data: data) {
-                    DispatchQueue.main.async {
-                        print("got the image")
-                        self.profileImageView.image = image
-                    }
+        let session = URLSession.shared
+        
+        let task = session.dataTask(with: imageURL) { data, response, error in
+            if let error = error {
+                print("Error downloading image: \(error)")
+                return
+            }
+            guard let data = data else {
+                print("No data received")
+                return
+            }
+            if let image = UIImage(data: data) {
+                DispatchQueue.main.async {
+                    print("got the image")
+                    self.profileImageView.image = image
                 }
             }
-            task.resume()
+        }
+        task.resume()
     }
 }
 
@@ -89,26 +97,26 @@ extension ProfileVC:  UITableViewDelegate, UITableViewDataSource{
     }
     
     func showLogoutAlert() {
-            let alertController = UIAlertController(
-                title: "Loging out",
-                message: "Are you sure you want to logout?",
-                preferredStyle: .actionSheet
-            )
-            
-            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in}
-            
-            let logoutAction = UIAlertAction(title: "Logout", style: .destructive) {[weak self] _ in
-                guard let stronSelf = self else{
-                    return
-                }
-                stronSelf.Logout()
+        let alertController = UIAlertController(
+            title: "Loging out",
+            message: "Are you sure you want to logout?",
+            preferredStyle: .actionSheet
+        )
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in}
+        
+        let logoutAction = UIAlertAction(title: "Logout", style: .destructive) {[weak self] _ in
+            guard let stronSelf = self else{
+                return
             }
-            
-            alertController.addAction(cancelAction)
-            alertController.addAction(logoutAction)
-            
-            present(alertController, animated: true, completion: nil)
+            stronSelf.Logout()
         }
+        
+        alertController.addAction(cancelAction)
+        alertController.addAction(logoutAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
     
     public func Logout(){
         do{
@@ -117,11 +125,11 @@ extension ProfileVC:  UITableViewDelegate, UITableViewDataSource{
             let navigation = UINavigationController(rootViewController: vc )
             navigation.modalPresentationStyle = .fullScreen
             let tabController = self.tabBarController
-
+            
             self.present(navigation, animated: true,completion:{
                 tabController?.selectedIndex = 0
             })
-
+            
         }catch{
             print("Error while logging out")
         }

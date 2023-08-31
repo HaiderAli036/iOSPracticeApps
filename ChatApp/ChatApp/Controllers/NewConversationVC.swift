@@ -10,7 +10,8 @@ class NewConversationVC: UIViewController {
     var users:[UserInfo] = []
     var allUsers:[UserInfo] = []
     let activityIndicator = UIActivityIndicatorView(style: .large)
-    public var completion:((UserInfo)->(Void))?
+    
+    public var completion:((UserInfo,[[String:Any]])->(Void))?
     
     let searchBar:UISearchBar = {
         let searchBar = UISearchBar()
@@ -26,7 +27,7 @@ class NewConversationVC: UIViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         return tableView
     }()
-
+    
     private let noChatsLabel:UILabel = {
         let label = UILabel()
         label.isHidden = true
@@ -83,16 +84,19 @@ class NewConversationVC: UIViewController {
                                           height: indicatorHeight)
     }
     
-    func convertToUserInfoArray(data: [String: [String: String]]) -> [UserInfo] {
+    func convertToUserInfoArray(data: [[String: Any]]) -> [UserInfo] {
         var userInfoArray: [UserInfo] = []
+        let currentEmail = DatabaseManager.safeEmail(email: UserDefaults.standard.string(forKey: "user_email")!)
         
-        for (email, info) in data {
-            if let firstName = info["first_name"], let lastName = info["last_name"] {
-                let userInfo = UserInfo(email: email, firstName: firstName, lastName: lastName)
-                userInfoArray.append(userInfo)
+        for (info) in data {
+            if let email = info["email"], let name = info["name"] {
+                if(email as! String != currentEmail){
+                    let userInfo = UserInfo(email:email as! String,firstName: name as! String, lastName: "" )
+                    
+                    userInfoArray.append(userInfo)
+                }
             }
         }
-        
         return userInfoArray
     }
     
@@ -126,8 +130,20 @@ extension NewConversationVC:  UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let targetUser = users[indexPath.row]
+        var myConversations = [[String:Any]]()
+        
+        //get tpped user conversations
+        DatabaseManager.shared.getMyConversations(path: "\(targetUser.email ?? "")/conversations", completion: {result  in
+            switch result {
+            case .success(let conversations):
+                myConversations = conversations
+            case .failure(let error):
+                print("error occured while fetching conversations",error);
+            }
+        })
+        
         dismiss(animated: true,completion: { [weak self] in
-            self?.completion?(targetUser)
+            self?.completion?(targetUser,myConversations)
         })
     }
 }
@@ -137,22 +153,22 @@ extension NewConversationVC:UISearchBarDelegate{
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if let searchText = searchBar.text {
             users = filterUserInfoArray(userInfoArray:allUsers,searchPrefix:searchText )
-           
+            
             if users.count == 0 {
                 noChatsLabel.isHidden = false
             }else{
                 noChatsLabel.isHidden = true
             }
-           
+            
             tableView.reloadData()
         }
     }
     
     func filterUserInfoArray(userInfoArray: [UserInfo], searchPrefix: String) -> [UserInfo] {
-            let filteredArray = userInfoArray.filter { userInfo in
-                return userInfo.firstName.hasPrefix(searchPrefix) || userInfo.lastName.hasPrefix(searchPrefix)
-            }
-            return filteredArray
+        let filteredArray = userInfoArray.filter { userInfo in
+            return userInfo.firstName.hasPrefix(searchPrefix) || userInfo.lastName.hasPrefix(searchPrefix)
+        }
+        return filteredArray
     }
     
 }

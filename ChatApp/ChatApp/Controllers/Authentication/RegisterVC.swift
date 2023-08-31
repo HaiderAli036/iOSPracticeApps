@@ -41,7 +41,7 @@ class RegisterVC: UIViewController {
         
         return field
     }()
-   
+    
     private let LastNameInput:UITextField = {
         let field = UITextField()
         field.placeholder = "Second Name"
@@ -138,25 +138,25 @@ class RegisterVC: UIViewController {
                                 width: size,
                                 height: size)
         FirstNameInput.frame = CGRect(x:30 ,
-                                  y: ChatLogo.bottom+20,
-                                  width: scrollView.width-60,
-                                  height: 52)
+                                      y: ChatLogo.bottom+20,
+                                      width: scrollView.width-60,
+                                      height: 52)
         LastNameInput.frame = CGRect(x:30 ,
-                                  y: FirstNameInput.bottom+20,
-                                  width: scrollView.width-60,
-                                  height: 52)
+                                     y: FirstNameInput.bottom+20,
+                                     width: scrollView.width-60,
+                                     height: 52)
         EmailInput.frame = CGRect(x:30 ,
                                   y: LastNameInput.bottom+20,
                                   width: scrollView.width-60,
                                   height: 52)
         PasswordInput.frame = CGRect(x:30,
-                                  y: EmailInput.bottom+20,
-                                  width: scrollView.width-60,
-                                  height: 52)
+                                     y: EmailInput.bottom+20,
+                                     width: scrollView.width-60,
+                                     height: 52)
         RegisterButton.frame = CGRect(x:30,
-                                  y: PasswordInput.bottom+20,
-                                  width: scrollView.width-60,
-                                  height: 52)
+                                      y: PasswordInput.bottom+20,
+                                      width: scrollView.width-60,
+                                      height: 52)
     }
     
     
@@ -186,11 +186,11 @@ class RegisterVC: UIViewController {
                 self.activityIndicator.stopAnimating()
                 return
             }
-
+            
             Auth.auth().createUser(withEmail: email, password: pass,completion: {[weak self] result, error in
-
+                
                 guard let strongSelf = self else { return }
-
+                
                 if let error = error {
                     strongSelf.activityIndicator.stopAnimating()
                     print("Sign-Up error: \(error.localizedDescription)")
@@ -198,7 +198,7 @@ class RegisterVC: UIViewController {
                 } else {
                     strongSelf.activityIndicator.stopAnimating()
                     print("Account Created successful")
-
+                    
                     let user = ChatAPPUser(firstName: firstName, lastName: lastName, email: email)
                     DatabaseManager.shared.createUser(for: user,completion: {success in
                         if success {
@@ -206,7 +206,7 @@ class RegisterVC: UIViewController {
                                   let data = strongSelf.compressImage(image) else{
                                 return
                             }
-                    
+                            
                             let fileName = user.profilePictureFileName
                             print(fileName)
                             StorageManager.shared.uploadProfilePicture(wih:data, fileName: fileName, completion: { result in
@@ -214,10 +214,10 @@ class RegisterVC: UIViewController {
                                 case  .success(let downloadUrl):
                                     print(downloadUrl)
                                     UserDefaults.standard.setValue(downloadUrl, forKey: "profile_picuture_url")
-                                    UserDefaults.standard.setValue(email, forKey: "email")
+                                    UserDefaults.standard.setValue(email, forKey: "user_email")
                                     UserDefaults.standard.setValue(firstName+" "+lastName, forKey: "user_name")
                                 case .failure(let error):
-                                     print(error)
+                                    print(error)
                                 }
                                 
                             } )
@@ -225,14 +225,14 @@ class RegisterVC: UIViewController {
                     })
                     
                     strongSelf.showToast(error:false, message:"Account Created successfully Logging in")
-
+                    
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                         strongSelf.navigationController?.dismiss(animated: true)
                     }
                 }
             })
         })
-    
+        
     }
     
     func compressImage(_ image: UIImage) -> Data? {
@@ -268,26 +268,26 @@ extension RegisterVC:UITextFieldDelegate{
 }
 
 extension RegisterVC:UINavigationControllerDelegate,UIImagePickerControllerDelegate{
-   
+    
     @objc func ImageSelectHandler() {
         let alertController = UIAlertController(title: "Choose Image Source", message: nil, preferredStyle: .actionSheet)
-
+        
         let cameraAction = UIAlertAction(title: "Camera", style: .default) { _ in
             self.openCamera()
         }
         alertController.addAction(cameraAction)
-
+        
         let photoLibraryAction = UIAlertAction(title: "Photo Library", style: .default) { _ in
             self.openPhotoLibrary()
         }
         alertController.addAction(photoLibraryAction)
-
+        
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         alertController.addAction(cancelAction)
-
+        
         present(alertController, animated: true, completion: nil)
     }
-
+    
     func openCamera() {
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
             imagePicker.sourceType = .camera
@@ -298,14 +298,14 @@ extension RegisterVC:UINavigationControllerDelegate,UIImagePickerControllerDeleg
             print("Camera is not available.")
         }
     }
-
+    
     func openPhotoLibrary() {
         imagePicker.sourceType = .photoLibrary
         imagePicker.allowsEditing = true
         imagePicker.delegate = self
         present(imagePicker, animated: true, completion: nil)
     }
-
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let selectedImage = info[.originalImage] as? UIImage {
             profileImage = selectedImage
@@ -317,9 +317,9 @@ extension RegisterVC:UINavigationControllerDelegate,UIImagePickerControllerDeleg
         
         picker.dismiss(animated: true, completion: nil)
     }
-
+    
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
-
+    
 }

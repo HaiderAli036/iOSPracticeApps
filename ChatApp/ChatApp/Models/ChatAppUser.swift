@@ -14,3 +14,5 @@ struct ChatAPPUser  {
         return "\(safeEmail)_profile_picture.png"
     }
 }
+
+

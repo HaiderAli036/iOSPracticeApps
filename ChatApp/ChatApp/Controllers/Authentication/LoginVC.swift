@@ -97,18 +97,18 @@ class LoginVC: UIViewController {
                                 y: 10,
                                 width: size,
                                 height: size)
-        EmailInput.frame = CGRect(x:30 ,te
+        EmailInput.frame = CGRect(x:30,
                                   y: ChatLogo.bottom+20,
                                   width: scrollView.width-60,
                                   height: 52)
         PasswordInput.frame = CGRect(x:30,
-                                  y: EmailInput.bottom+20,
-                                  width: scrollView.width-60,
-                                  height: 52)
+                                     y: EmailInput.bottom+20,
+                                     width: scrollView.width-60,
+                                     height: 52)
         LoginButton.frame = CGRect(x:30,
-                                  y: PasswordInput.bottom+20,
-                                  width: scrollView.width-60,
-                                  height: 52)
+                                   y: PasswordInput.bottom+20,
+                                   width: scrollView.width-60,
+                                   height: 52)
     }
     
     @objc func RegisterHandler(){
@@ -130,9 +130,9 @@ class LoginVC: UIViewController {
             return
         }
         Auth.auth().signIn(withEmail: email, password: pass) { [weak self] authResult, error in
-
+            
             guard let strongSelf = self else { return }
-
+            
             if let error = error {
                 // Handle sign-in error
                 print("Sign-in error: \(error.localizedDescription)")
@@ -144,16 +144,31 @@ class LoginVC: UIViewController {
                 strongSelf.showToast(error: false, message: "Signed in successfully")
                 strongSelf.activityIndicator.stopAnimating()
                 strongSelf.LoginButton.isEnabled = true
-                
+                let safeEmail = DatabaseManager.safeEmail(email: email)
+                DatabaseManager.shared.getDataFor(path:safeEmail , completion: {result in
+                    switch result{
+                    case .success(let data):
+                        guard let userData = data as? [String:Any],
+                              let firstName = userData["first_name"],
+                              let lastName = userData["last_name"] else{
+                            return
+                            
+                        }
+                        UserDefaults.standard.setValue("\(firstName) \(lastName)", forKey: "user_name")
+                    case .failure(let error) :
+                        print(error)
+                        break
+                    }
+                })
                 UserDefaults.standard.setValue(email, forKey: "user_email")
-
+                
                 strongSelf.navigationController?.dismiss(animated: true)
             }
         }
         
     }
-
-
+    
+    
     func showToast(error:Bool = true,message: String) {
         let toastView = CustomToast(error:error,message: message)
         toastView.translatesAutoresizingMaskIntoConstraints = false
