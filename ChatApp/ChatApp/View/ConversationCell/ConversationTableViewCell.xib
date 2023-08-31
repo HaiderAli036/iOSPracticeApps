@@ -18,10 +18,10 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <stackView opaque="NO" contentMode="scaleToFill" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="jU1-2d-4uB">
-                        <rect key="frame" x="0.0" y="0.0" width="406" height="60"/>
+                        <rect key="frame" x="5" y="5" width="396" height="60"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.circle" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="bKq-Vm-nrX">
-                                <rect key="frame" x="5" y="1" width="100" height="58.666666666666671"/>
+                                <rect key="frame" x="0.0" y="1" width="100" height="58.666666666666671"/>
                                 <color key="tintColor" name="avatarViewBackground"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="100" id="N9d-GZ-wS1"/>
@@ -29,7 +29,7 @@
                                 </constraints>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="AVw-rM-4oX">
-                                <rect key="frame" x="115" y="0.0" width="291" height="60"/>
+                                <rect key="frame" x="110" y="0.0" width="286" height="60"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DO2-fF-uZc" userLabel="Title">
                                         <rect key="frame" x="0.0" y="0.0" width="43.333333333333336" height="30"/>
@@ -48,15 +48,14 @@
                         </subviews>
                         <constraints>
                             <constraint firstItem="AVw-rM-4oX" firstAttribute="leading" secondItem="bKq-Vm-nrX" secondAttribute="trailing" constant="10" id="Ffy-gs-cBh"/>
-                            <constraint firstItem="bKq-Vm-nrX" firstAttribute="leading" secondItem="jU1-2d-4uB" secondAttribute="leading" constant="5" id="ZOV-Ad-fXy"/>
                         </constraints>
                     </stackView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="jU1-2d-4uB" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="3LZ-YA-HCh"/>
-                    <constraint firstItem="jU1-2d-4uB" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="DwV-5I-qwV"/>
-                    <constraint firstAttribute="trailing" secondItem="jU1-2d-4uB" secondAttribute="trailing" id="lGl-Br-YEQ"/>
-                    <constraint firstAttribute="bottom" secondItem="jU1-2d-4uB" secondAttribute="bottom" id="vVc-3d-tna"/>
+                    <constraint firstItem="jU1-2d-4uB" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="3LZ-YA-HCh"/>
+                    <constraint firstItem="jU1-2d-4uB" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="5" id="DwV-5I-qwV"/>
+                    <constraint firstAttribute="trailing" secondItem="jU1-2d-4uB" secondAttribute="trailing" constant="5" id="lGl-Br-YEQ"/>
+                    <constraint firstAttribute="bottom" secondItem="jU1-2d-4uB" secondAttribute="bottom" constant="5" id="vVc-3d-tna"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>

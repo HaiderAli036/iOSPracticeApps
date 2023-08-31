@@ -226,6 +226,10 @@ class RegisterVC: UIViewController {
                     
                     strongSelf.showToast(error:false, message:"Account Created successfully Logging in")
                     
+                    // Post the notification
+                    let myNotificationName = Notification.Name("MyNotificationName")
+                    NotificationCenter.default.post(name:myNotificationName, object: nil, userInfo: ["key": "value"])
+                    
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                         strongSelf.navigationController?.dismiss(animated: true)
                     }

@@ -20,6 +20,9 @@ class ConversationsVC: UIViewController {
     
     public var conversations:[conversation] = [conversation]()
     
+    let myNotificationName = Notification.Name("MyNotificationName")
+
+    
     private let tableView:UITableView = {
         let tableView = UITableView()
         tableView.isHidden = true
@@ -46,6 +49,19 @@ class ConversationsVC: UIViewController {
         navigationItem.rightBarButtonItem = rightButton
         startListeningForConversation()
         fetchChats()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleNotification(_:)), name: myNotificationName, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: myNotificationName, object: nil)
+    }
+    // Selector method to handle the notification
+    @objc func handleNotification(_ notification: Notification) {
+            conversations = [conversation]()
+            tableView.reloadData()
+        startListeningForConversation()
+        tableView.reloadData()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -60,12 +76,14 @@ class ConversationsVC: UIViewController {
         super.viewDidLayoutSubviews()
         tableView.frame = view.bounds
     }
+
     
     private func startListeningForConversation(){
         
         guard let currentUserEmail = UserDefaults.standard.value(forKey: "user_email") as? String else{
             return
         }
+        
         let currentUserSafeEmail = DatabaseManager.safeEmail(email: currentUserEmail)
         
         DatabaseManager.shared.getAllChatsFromDatabase(for: currentUserSafeEmail, completion: {[weak self] result in
@@ -171,6 +189,9 @@ extension ConversationsVC:  UITableViewDelegate, UITableViewDataSource{
         cell.title.text = model.name
         cell.message.text = model.latestMessage.text
         
+        if  model.latestMessage.isRead == true {
+            cell.message.textColor = .gray
+        }
         let path = "images/\(model.otherUserEmail)_profile_picture.png"
         
         StorageManager.shared.downloadUrl(for: path, completion: {[weak self]result in
@@ -199,7 +220,7 @@ extension ConversationsVC:  UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        return UITableView.automaticDimension
     }
     
 }

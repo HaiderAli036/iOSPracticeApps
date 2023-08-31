@@ -6,8 +6,9 @@ class ProfileVC: UIViewController {
     @IBOutlet var profileImageView:UIImageView!
     @IBOutlet var tableView:UITableView!
     @IBOutlet var userName:UILabel!
+    @IBOutlet var userEmail:UILabel!
     let data = ["Settings","Log out"]
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView?.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
@@ -18,8 +19,11 @@ class ProfileVC: UIViewController {
         guard let userName = UserDefaults.standard.value(forKey: "user_name") as? String else{
             return
         }
+        guard let userEmail = UserDefaults.standard.value(forKey: "user_email") as? String else{
+            return
+        }
         self.userName.text = userName
-        
+        self.userEmail.text = userEmail
         
     }
     
@@ -125,6 +129,7 @@ extension ProfileVC:  UITableViewDelegate, UITableViewDataSource{
             let navigation = UINavigationController(rootViewController: vc )
             navigation.modalPresentationStyle = .fullScreen
             let tabController = self.tabBarController
+            
             
             self.present(navigation, animated: true,completion:{
                 tabController?.selectedIndex = 0

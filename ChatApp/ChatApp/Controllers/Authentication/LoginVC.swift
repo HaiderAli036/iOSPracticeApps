@@ -161,6 +161,10 @@ class LoginVC: UIViewController {
                     }
                 })
                 UserDefaults.standard.setValue(email, forKey: "user_email")
+              
+                // Post the notification
+                let myNotificationName = Notification.Name("MyNotificationName")
+                NotificationCenter.default.post(name:myNotificationName, object: nil, userInfo: ["key": "value"])
                 
                 strongSelf.navigationController?.dismiss(animated: true)
             }
